@@ -2,33 +2,17 @@
 import { EditorCanvasCardType, EditorNodeType } from '@/lib/types'
 import { useEditor } from '@/providers/editor-provider'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import ReactFlow, {
-  Background,
-  Connection,
-  Controls,
-  Edge,
-  EdgeChange,
-  MiniMap,
-  NodeChange,
-  ReactFlowInstance,
-  applyNodeChanges,
-  applyEdgeChanges,
-  addEdge,
-} from '@xyflow/react'
+import ReactFlow, {Background,Connection,Controls,Edge,EdgeChange,MiniMap,NodeChange,ReactFlowInstance,applyNodeChanges,applyEdgeChanges,addEdge,} from 'reactflow'
 import 'reactflow/dist/style.css'
 import EditorCanvasCardSingle from './editor-canvas-card-single'
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from '@/components/ui/resizable'
+import {ResizableHandle,ResizablePanel,ResizablePanelGroup,} from '@/components/ui/resizable'
 import { toast } from 'sonner'
 import { usePathname } from 'next/navigation'
-// import { v4 } from 'uuid'
+import { v4 } from 'uuid'
 import { EditorCanvasDefaultCardTypes } from '@/lib/constant'
 import FlowInstance from './flow-instance'
-// import EditorCanvasSidebar from './editor-canvas-sidebar'
-// import { onGetNodesEdges } from '../../../_actions/workflow-connections'
+import EditorCanvasSidebar from './editor-canvas-sidebar'
+import { onGetNodesEdges } from '../../../_actions/workflow-connections'
 
 type Props = {}
 
@@ -41,56 +25,41 @@ const EditorCanvas = (props: Props) => {
   const [nodes, setNodes] = useState(initialNodes)
   const [edges, setEdges] = useState(initialEdges)
   const [isWorkFlowLoading, setIsWorkFlowLoading] = useState<boolean>(false)
-  const [reactFlowInstance, setReactFlowInstance] =
-    useState<ReactFlowInstance>()
+  const [reactFlowInstance, setReactFlowInstance] =useState<ReactFlowInstance>()
   const pathname = usePathname()
+
 
   const onDragOver = useCallback((event: any) => {
     event.preventDefault()
-    event.dataTransfer.dropEffect = 'move'
-  }, [])
+    event.dataTransfer.dropEffect = 'move'}, [])
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
       //@ts-ignore
       setNodes((nds) => applyNodeChanges(changes, nds))
-    },
-    [setNodes]
-  )
+    },[setNodes])
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) =>
       //@ts-ignore
-      setEdges((eds) => applyEdgeChanges(changes, eds)),
-    [setEdges]
-  )
+      setEdges((eds) => applyEdgeChanges(changes, eds)),[setEdges])
 
   const onConnect = useCallback(
-    (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
-    []
-  )
+    (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),[])
 
   const onDrop = useCallback(
     (event: any) => {
       event.preventDefault()
-
-      const type: EditorCanvasCardType['type'] = event.dataTransfer.getData(
-        'application/reactflow'
-      )
+      const type: EditorCanvasCardType['type'] = event.dataTransfer.getData('application/reactflow')
 
       // check if the dropped element is valid
-      if (typeof type === 'undefined' || !type) {
-        return
-      }
+      if (typeof type === 'undefined' || !type) {return}
 
-      const triggerAlreadyExists = state.editor.elements.find(
-        (node) => node.type === 'Trigger'
-      )
+      const triggerAlreadyExists = state.editor.elements.find((node) => node.type === 'Trigger')
 
       if (type === 'Trigger' && triggerAlreadyExists) {
         toast('Only one trigger can be added to automations at the moment')
-        return
-      }
+        return}
 
       // reactFlowInstance.project was renamed to reactFlowInstance.screenToFlowPosition
       // and you don't need to subtract the reactFlowBounds.left/top anymore
@@ -98,20 +67,12 @@ const EditorCanvas = (props: Props) => {
       if (!reactFlowInstance) return
       const position = reactFlowInstance.screenToFlowPosition({
         x: event.clientX,
-        y: event.clientY,
-      })
+        y: event.clientY,})
 
       const newNode = {
-        id: v4(),
-        type,
-        position,
+        id: v4(),type,position,
         data: {
-          title: type,
-          description: EditorCanvasDefaultCardTypes[type].description,
-          completed: false,
-          current: false,
-          metadata: {},
-          type: type,
+          title: type, description: EditorCanvasDefaultCardTypes[type].description, completed: false, current: false, metadata: {}, type: type,
         },
       }
       //@ts-ignore

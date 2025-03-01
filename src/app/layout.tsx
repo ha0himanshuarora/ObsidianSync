@@ -10,8 +10,9 @@ import { BillingProvider } from '@/providers/billing-provider'
 const font = DM_Sans({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Fuzzie.',
-  description: 'Automate Your Work With Fuzzie.',
+  title: 'ObsidianSync',
+  description: 'Automate Your Work With ObsidianSync.',
+  
 }
 
 export default function RootLayout({
