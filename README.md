@@ -78,13 +78,3 @@ We welcome contributions from the community! If you’d like to contribute:
 5. Open a Pull Request.
 
 ---
-
-## License
-
-ObsidianSync is open-source software licensed under the [MIT License](LICENSE).
-
----
-
-## Contact
-
-For any inquiries, feedback, or support, please reach out to us at **support@obsidiansync.com**.
